@@ -8,6 +8,54 @@ use App\Models\Record;
 
 class RecordController extends Controller
 {
+
+    public function store(Request $request){
+        try {
+            $request->validate([
+                'title' => 'required',
+                'status' => 'required|in:allowed,prohibited',
+            ]);
+            $newRecord = Record::create($request->all());
+
+            return response()->json(['record' => $newRecord], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+    public function show($id) {
+        try {
+            $record = Record::findOrFail($id);
+
+            return response()->json(['record' => $record], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+    public function update(Request $request, $id){
+        try {
+            $request->validate([
+                'title' => 'required',
+                'status' => 'required|in:allowed,prohibited',
+            ]);
+            $record = Record::findOrFail($id);
+            $record->update($request->all());
+
+            return response()->json(['record' => $record], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+    public function destroy($id){
+        try {
+            $record = Record::findOrFail($id);
+            $record->delete();
+
+            return response()->json(['message' => 'Record deleted successfully'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+
     public function generate(Request $request)
     {
         try {

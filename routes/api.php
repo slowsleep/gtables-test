@@ -18,5 +18,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/generate', [App\Http\Controllers\Api\RecordController::class, 'generate']);
-Route::delete('/destroy-all', [App\Http\Controllers\Api\RecordController::class, 'destroyAll']);
+Route::post('/records/generate', [App\Http\Controllers\Api\RecordController::class, 'generate']);
+Route::delete('/records/destroy-all', [App\Http\Controllers\Api\RecordController::class, 'destroyAll']);
+
+Route::post('/record', [App\Http\Controllers\Api\RecordController::class, 'store']);
+Route::get('/record/{id}', [App\Http\Controllers\Api\RecordController::class, 'show']);
+Route::put('/record/{id}', [App\Http\Controllers\Api\RecordController::class, 'update']);
+Route::delete('/record/{id}', [App\Http\Controllers\Api\RecordController::class, 'destroy']);

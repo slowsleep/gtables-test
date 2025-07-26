@@ -4,6 +4,6 @@ namespace App\Enums;
 
 class Status
 {
-    public const ALLOWED = 'Allowed';
-    public const PROHIBITED = 'Prohibited';
+    public const ALLOWED = 'allowed';
+    public const PROHIBITED = 'prohibited';
 }

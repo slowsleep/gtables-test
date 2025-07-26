@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Record;
+use App\Enums\Status;
 
 class RecordController extends Controller
 {
@@ -13,7 +14,7 @@ class RecordController extends Controller
         try {
             $request->validate([
                 'title' => 'required',
-                'status' => 'required|in:allowed,prohibited',
+                'status' => 'required|in:' . implode(',', Status::values()),
             ]);
             $newRecord = Record::create($request->all());
 
@@ -35,7 +36,7 @@ class RecordController extends Controller
         try {
             $request->validate([
                 'title' => 'required',
-                'status' => 'required|in:allowed,prohibited',
+                'status' => 'required|in:' . implode(',', Status::values()),
             ]);
             $record = Record::findOrFail($id);
             $record->update($request->all());

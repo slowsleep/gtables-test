@@ -16,7 +16,7 @@ class RecordFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(3),
-            'status' => $this->faker->randomElement([Status::ALLOWED, Status::PROHIBITED]),
+            'status' => $this->faker->randomElement(Status::values()),
         ];
     }
 }

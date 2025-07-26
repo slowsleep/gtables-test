@@ -4,6 +4,14 @@ namespace App\Enums;
 
 class Status
 {
-    public const ALLOWED = 'allowed';
-    public const PROHIBITED = 'prohibited';
+    public const ALLOWED = 'Allowed';
+    public const PROHIBITED = 'Prohibited';
+
+    public static function values(): array
+    {
+        return [
+            self::ALLOWED,
+            self::PROHIBITED,
+        ];
+    }
 }

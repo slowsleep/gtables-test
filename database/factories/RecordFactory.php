@@ -15,7 +15,7 @@ class RecordFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title(),
+            'title' => $this->faker->sentence(3),
             'status' => $this->faker->randomElement([Status::ALLOWED, Status::PROHIBITED]),
         ];
     }

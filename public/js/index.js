@@ -124,7 +124,7 @@ async function openEditModal(recordId) {
         let record = data.record;
         textId.innerHTML = record.id.toString();
         inputTitle.value = record.title;
-        inputStatus.value = record.status.toLowerCase();
+        inputStatus.value = record.status;
     } else {
         alert(response.statusText);
     }

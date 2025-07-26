@@ -31,8 +31,8 @@
                     <div class="flex flex-row broder-white-1">
                         <label class="w-1/4" for="status">status</label>
                         <select class="border border-gray-500 w-full" name="status" id="status">
-                            <option value="allowed">allowed</option>
-                            <option value="prohibited">prohibited</option>
+                            <option value="Allowed">Allowed</option>
+                            <option value="Prohibited">Prohibited</option>
                         </select>
                     </div>
                     <input type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" value="Создать" />
@@ -76,8 +76,8 @@
                 <div class="flex flex-row gap-2">
                     <p>status: </p>
                     <select class="border border-gray-500" name="status" id="modal-record-status">
-                        <option value="allowed">allowed</option>
-                        <option value="prohibited">prohibited</option>
+                        <option value="Allowed">Allowed</option>
+                        <option value="Prohibited">Prohibited</option>
                     </select>
                 </div>
                 <div class="flex flex-row justify-between">

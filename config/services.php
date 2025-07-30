@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'credentials_path' => storage_path('app/google/credentials.json'),
+    ],
+
 ];

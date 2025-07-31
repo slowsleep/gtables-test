@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\RecordController;
+use App\Http\Controllers\Api\GoogleSheetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/records/generate', [App\Http\Controllers\Api\RecordController::class, 'generate']);
-Route::delete('/records/destroy-all', [App\Http\Controllers\Api\RecordController::class, 'destroyAll']);
+Route::post('/records/generate', [RecordController::class, 'generate']);
+Route::delete('/records/destroy-all', [RecordController::class, 'destroyAll']);
 
-Route::post('/record', [App\Http\Controllers\Api\RecordController::class, 'store']);
-Route::get('/record/{id}', [App\Http\Controllers\Api\RecordController::class, 'show']);
-Route::put('/record/{id}', [App\Http\Controllers\Api\RecordController::class, 'update']);
-Route::delete('/record/{id}', [App\Http\Controllers\Api\RecordController::class, 'destroy']);
+Route::post('/record', [RecordController::class, 'store']);
+Route::get('/record/{id}', [RecordController::class, 'show']);
+Route::put('/record/{id}', [RecordController::class, 'update']);
+Route::delete('/record/{id}', [RecordController::class, 'destroy']);
+
+Route::post('/google-sheet-sync', [GoogleSheetController::class, 'setSpreadsheetId']);

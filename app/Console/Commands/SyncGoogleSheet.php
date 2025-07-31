@@ -54,6 +54,11 @@ class SyncGoogleSheet extends Command
             $googleSheetsService = new GoogleSheetsService($settings->spreadsheet_id);
             $googleSheetData = $googleSheetsService->getAllSheetData();
 
+            if ($googleSheetData->isEmpty() && $records->isEmpty()) {
+                Log::info('Таблица Google Sheets и таблица records в БД - пусты. Синхронизация пропущена.');
+                return 0;
+            }
+
             $sheetData = $googleSheetData->keyBy(fn($row) => $row[0]); // key = record.id
             $dbData = $records->keyBy('id');
 

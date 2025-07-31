@@ -61,6 +61,16 @@ class GoogleSheetsService
 
     public function getAllSheetData()
     {
+        // Получаем метаданные листа
+        $sheetInfo = $this->service->spreadsheets->get($this->spreadsheetId);
+        $gridProps = $sheetInfo->getSheets()[0]->getProperties()->getGridProperties();
+        $lastRow = $gridProps->getRowCount(); // Последняя строка в таблице
+
+        // Если в таблице только заголовок (1 строка) — возвращаем пустой массив
+        if ($lastRow <= 1) {
+            return collect([]);
+        }
+
         $response = $this->service->spreadsheets_values->get($this->spreadsheetId, 'A2:Z');
         $rows = $response->getValues() ?? [];
 

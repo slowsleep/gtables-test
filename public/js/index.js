@@ -1,4 +1,4 @@
-// cоздание новой записи
+// Создание новой записи
 const createRecordForm = document.getElementById('create-record-form');
 createRecordForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -39,7 +39,7 @@ createRecordForm.addEventListener('submit', async (event) => {
 
 })
 
-// генерирование 1000 записей
+// Генерирование 1000 записей
 const generateButton = document.getElementById('generate-records');
 generateButton.addEventListener('click', async () => {
     await getData();
@@ -87,7 +87,7 @@ async function getData() {
 }
 
 
-// удаление всех записей
+// Удаление всех записей
 const deleteButton = document.getElementById('delete-records');
 deleteButton.addEventListener('click', async () => {
     await deleteData();
@@ -108,7 +108,7 @@ async function deleteData() {
     }
 }
 
-// открытие модального окна с данными записи для редактирования записи
+// Открытие модального окна с данными записи для редактирования записи
 async function openEditModal(recordId) {
     modal.classList.remove('hidden');
     overlay.classList.remove('hidden');
@@ -132,7 +132,7 @@ async function openEditModal(recordId) {
     let saveButton = editForm.querySelector("button[name='save']");
     let cancelButton = editForm.querySelector("button[name='cancel']");
 
-    // убираем старые обработчики (если повторно откроем модалку)
+    // Убираем старые обработчики (если повторно откроем модалку)
     const saveClone = saveButton.cloneNode(true);
     saveButton.parentNode.replaceChild(saveClone, saveButton);
 
@@ -168,21 +168,21 @@ async function openEditModal(recordId) {
     });
 }
 
-// обработка кликов по таблице
+// Обработка кликов по таблице
 // для обработки кнопок редактирования и удаления
 const tableBody = document.querySelector('tbody');
 
 tableBody.addEventListener('click', async (event) => {
     const target = event.target;
 
-    // редактирование записи
+    // Редактирование записи
     if (target.classList.contains('edit-record')) {
         const recordId = target.getAttribute('data-record-id');
         // показ модалки + загрузка данных
         await openEditModal(recordId);
     }
 
-    // удаление записи
+    // Удаление записи
     if (target.classList.contains('delete-record')) {
         const recordId = target.getAttribute('data-record-id');
         const isDelete = confirm("Вы уверены, что хотите удалить запись?");
@@ -205,3 +205,29 @@ async function deleteRecord(recordId) {
         console.error(error.message);
     }
 }
+
+// Синхронизация с гугл таблицами
+const syncForm = document.getElementById('sync-google-sheets');
+syncForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    // Берем url из инпута
+    const url = syncForm.querySelector('input[name="url"]').value;
+
+    try {
+        const response = await fetch('/api/google-sheet-sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                url
+            })
+        });
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        alert('Синхронизация завершена');
+    } catch (error) {
+        console.error(error.message);
+    }
+})

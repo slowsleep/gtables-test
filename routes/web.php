@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\FetchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,4 @@ use App\Http\Controllers\RecordController;
 */
 
 Route::get('/', [RecordController::class, 'index'])->name('home');
+Route::get('/fetch/{count?}', [FetchController::class, 'index'])->name('fetch');

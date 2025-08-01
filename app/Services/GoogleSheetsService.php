@@ -79,8 +79,7 @@ class GoogleSheetsService
 
     public function appendRecords(Collection $records)
     {
-        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, 'A2:Z');
-        $rows = $response->getValues() ?? [];
+        $rows = $this->getAllSheetData();
 
         $lastRowIndex = count($rows) + 1;
 

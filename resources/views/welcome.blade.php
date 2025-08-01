@@ -31,7 +31,7 @@
             <label for="url">URL на документ google sheet:</label>
             <input class="border border-gray-500" type="text" id="url" name="url" placeholder="https://...">
             <p class="text-[10px] text-gray-400">выгрузка в гугл таблицу записи со статусом allowed</p>
-            <input type="submit" value="синхронизировать" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" />
+            <input type="submit" value="Синхронизировать" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" />
         </form>
     </div>
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" id="generate-records">Сгенерировать 1000 записей</button>

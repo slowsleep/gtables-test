@@ -59,7 +59,7 @@ class GoogleSheetsService
 
     }
 
-    public function getAllSheetData()
+    public function getAllSheetData($range='A2:Z')
     {
         // Получаем метаданные листа
         $sheetInfo = $this->service->spreadsheets->get($this->spreadsheetId);
@@ -71,7 +71,7 @@ class GoogleSheetsService
             return collect([]);
         }
 
-        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, 'A2:Z');
+        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
         $rows = $response->getValues() ?? [];
 
         return collect($rows);

@@ -7,6 +7,7 @@ use Google\Service\Sheets;
 use Google\Service\Sheets\ValueRange;
 use App\Models\Record;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 
 class GoogleSheetsService
 {
@@ -27,6 +28,9 @@ class GoogleSheetsService
 
     public function syncRecords($toAdd, $toDelete, $toUpdate)
     {
+        // Проверяем наличие заголовков
+        $this->checkHeaders();
+
         // Ограничиваем количество запросов до 60 в минуту
         $batchSize = 60;
         $delayBetweenBatches = 60; // 60 секунд между партиями
@@ -59,6 +63,16 @@ class GoogleSheetsService
 
     }
 
+    public function checkHeaders()
+    {
+        $rows = $this->getAllSheetData('A1:A2')->toArray();
+
+        if (empty($rows)) {
+            $headers = Schema::getColumnListing('records');
+            $this->appendHeaders($headers);
+        }
+    }
+
     public function getAllSheetData($range='A2:Z')
     {
         // Получаем метаданные листа
@@ -75,6 +89,18 @@ class GoogleSheetsService
         $rows = $response->getValues() ?? [];
 
         return collect($rows);
+    }
+
+    public function appendHeaders(array $headers)
+    {
+        $body = new ValueRange(['values' => [$headers]]);
+
+        $this->service->spreadsheets_values->append(
+            $this->spreadsheetId,
+            "A1",
+            $body,
+            ['valueInputOption' => 'RAW']
+        );
     }
 
     public function appendRecords(Collection $records)
@@ -128,6 +154,65 @@ class GoogleSheetsService
         return null;
     }
 
+    protected function findInsertPosition($recordId)
+    {
+        // Получаем все ID из таблицы
+        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, 'A2:A');
+        $rows = $response->getValues() ?? [];
+        $ids = collect($rows)->pluck(0)->filter()->all();
+
+        // Находим ближайший меньший ID
+        $prevId = null;
+        foreach ($ids as $id) {
+            if ($id < $recordId) {
+                $prevId = $id;
+            } else {
+                break;
+            }
+        }
+
+        // Если не нашли меньший ID, вставляем после заголовка (строка 2)
+        if ($prevId === null) {
+            return 2;
+        }
+
+        // Находим строку с предыдущим ID
+        return $this->findRecordRow($prevId) + 1;
+    }
+
+    protected function insertRecordAtPosition(Record $record, $rowNumber)
+    {
+        $values = [
+            [$record->id, $record->title, $record->status, $record->created_at, $record->updated_at]
+        ];
+
+        // Сначала вставляем пустую строку
+        $batchUpdateRequest = new \Google\Service\Sheets\BatchUpdateSpreadsheetRequest([
+            'requests' => [
+                [
+                    'insertDimension' => [
+                        'range' => [
+                            'sheetId' => 0,
+                            'dimension' => 'ROWS',
+                            'startIndex' => $rowNumber - 1,
+                            'endIndex' => $rowNumber
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $this->service->spreadsheets->batchUpdate($this->spreadsheetId, $batchUpdateRequest);
+
+        // Затем заполняем новую строку данными
+        $body = new ValueRange(['values' => $values]);
+        $this->service->spreadsheets_values->update(
+            $this->spreadsheetId,
+            "A{$rowNumber}",
+            $body,
+            ['valueInputOption' => 'RAW']
+        );
+    }
+
     public function updateRecordPreservingComment(Record $record)
     {
         $rowNumber = $this->findRecordRow($record->id);
@@ -179,13 +264,9 @@ class GoogleSheetsService
                 ['valueInputOption' => 'RAW']
             );
         } else {
-            // Добавляем строку
-            $this->service->spreadsheets_values->append(
-                $this->spreadsheetId,
-                'A1',
-                $body,
-                ['valueInputOption' => 'RAW']
-            );
+            // Добавляем новую строку
+            $insertRow = $this->findInsertPosition($record->id);
+            $this->insertRecordAtPosition($record, $insertRow);
         }
     }
 

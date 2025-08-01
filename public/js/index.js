@@ -33,8 +33,10 @@ createRecordForm.addEventListener('submit', async (event) => {
             data-record-id="${record.id}">удалить</button></td>
         `;
         table.appendChild(row);
+        alert('Запись успешно создана');
     } catch (error) {
         console.error(error.message);
+        alert('Произошла ошибка при создании записи');
     }
 
 })
@@ -90,6 +92,10 @@ async function getData() {
 // Удаление всех записей
 const deleteButton = document.getElementById('delete-records');
 deleteButton.addEventListener('click', async () => {
+    const isDelete = confirm("Вы уверены, что хотите удалить все записи?");
+    if (!isDelete) {
+        return;
+    }
     await deleteData();
 })
 

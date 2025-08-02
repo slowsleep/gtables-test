@@ -232,7 +232,7 @@ syncForm.addEventListener('submit', async (event) => {
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-        alert('Синхронизация завершена');
+        window.location.reload();
     } catch (error) {
         console.error(error.message);
     }

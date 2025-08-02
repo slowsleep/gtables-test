@@ -22,6 +22,7 @@
         @if ($googleSheetIdIsSet)
             <p>Google spreadsheet id: {{ $googleSheetIdIsSet }}</p>
             <p>Сейчас cинхронизируется...</p>
+            <button class="bg-red-400 hover:bg-red-500 text-white font-bold py-1 px-2 rounded hover:cursor-pointer w-full" id="stop-sync">Остановить синхронизацию</button>
         @else
             <p>Google spreadsheet id не установлен</p>
         @endif

@@ -28,4 +28,5 @@ Route::get('/record/{id}', [RecordController::class, 'show']);
 Route::put('/record/{id}', [RecordController::class, 'update']);
 Route::delete('/record/{id}', [RecordController::class, 'destroy']);
 
-Route::post('/google-sheet-sync', [GoogleSheetController::class, 'setSpreadsheetId']);
+Route::post('/google-sheet-sync', [GoogleSheetController::class, 'storeAndSync']);
+Route::delete('/google-sheet-sync', [GoogleSheetController::class, 'destroy']);

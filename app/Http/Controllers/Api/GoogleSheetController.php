@@ -10,7 +10,7 @@ use App\Models\GoogleSheetSettings;
 
 class GoogleSheetController extends Controller
 {
-    public function setSpreadsheetId(Request $request)
+    public function storeAndSync(Request $request)
     {
         try {
             $request->validate([
@@ -30,6 +30,20 @@ class GoogleSheetController extends Controller
             return response()->json([
                 'message' => 'ID Google-таблицы успешно обновлён!',
                 'data' => $settings,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy()
+    {
+        try {
+            GoogleSheetSettings::query()->delete();
+            return response()->json([
+                'message' => 'ID Google-таблицы успешно удалён!',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

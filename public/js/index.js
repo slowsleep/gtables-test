@@ -237,3 +237,19 @@ syncForm.addEventListener('submit', async (event) => {
         console.error(error.message);
     }
 })
+
+
+const stopSyncButton = document.querySelector('#stop-sync');
+stopSyncButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch('/api/google-sheet-sync', {
+            method: 'DELETE'
+        });
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        window.location.reload();
+    } catch (error) {
+        console.error(error.message);
+    }
+})

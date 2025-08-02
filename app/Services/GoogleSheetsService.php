@@ -8,6 +8,7 @@ use Google\Service\Sheets\ValueRange;
 use App\Models\Record;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class GoogleSheetsService
 {
@@ -68,7 +69,16 @@ class GoogleSheetsService
         $rows = $this->getAllSheetData('A1:A2')->toArray();
 
         if (empty($rows)) {
-            $headers = Schema::getColumnListing('records');
+            $columns = DB::select("
+                SELECT COLUMN_NAME
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME = 'records'
+                ORDER BY ORDINAL_POSITION
+            ");
+
+            $headers = array_map(fn($col) => $col->COLUMN_NAME, $columns);
+
             $this->appendHeaders($headers);
         }
     }

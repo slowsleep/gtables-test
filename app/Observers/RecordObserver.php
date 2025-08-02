@@ -9,7 +9,8 @@ class RecordObserver
 {
     public function deleted(Record $record)
     {
-        $settings = GoogleSheetSettings::find(1);
+        // $settings = GoogleSheetSettings::find(1);
+        $settings = GoogleSheetSettings::latest()->first();
 
         if (!$settings || !$settings->spreadsheet_id) {
             return;
@@ -22,7 +23,7 @@ class RecordObserver
     public function updated(Record $record)
     {
         if ($record->wasChanged('status')) {
-            $settings = GoogleSheetSettings::find(1);
+            $settings = GoogleSheetSettings::latest()->first();
 
             if (!$settings || !$settings->spreadsheet_id) return;
 

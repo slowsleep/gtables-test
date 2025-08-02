@@ -41,7 +41,7 @@ class SyncGoogleSheet extends Command
      */
     public function handle()
     {
-        $settings = GoogleSheetSettings::find(1);
+        $settings = GoogleSheetSettings::latest()->first();
 
         if (!$settings || !$settings->spreadsheet_id) {
             Log::info('Google Spreadsheet ID не задан. Синхронизация пропущена.');

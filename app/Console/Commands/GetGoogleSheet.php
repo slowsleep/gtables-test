@@ -39,7 +39,7 @@ class GetGoogleSheet extends Command
      */
     public function handle()
     {
-        $settings = GoogleSheetSettings::find(1);
+        $settings = GoogleSheetSettings::latest()->first();
 
         if (!$settings || !$settings->spreadsheet_id) {
             $this->error('Google Spreadsheet ID не задан.');

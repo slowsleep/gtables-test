@@ -10,7 +10,7 @@ class FetchController extends Controller
 {
     public function index($count = null)
     {
-        $settings = GoogleSheetSettings::find(1);
+        $settings = GoogleSheetSettings::latest()->first();
 
         if (!$settings || !$settings->spreadsheet_id) {
             $this->error('Google Spreadsheet ID не задан.');

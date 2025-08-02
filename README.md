@@ -48,19 +48,28 @@ php artisan google-sheet:get 30
 
 ## Запуск проекта
 
-Установить зависимости:
+1. Установить зависимости:
 
-```composer install```
+    ```composer install```
 
-Поместите JSON-ключ сервисного аккаунта Google в `/storage/app/credentials.json`
+2. Поместите JSON-ключ сервисного аккаунта Google в `/storage/app/credentials.json`
 
-Запустить приложение
+3. Запустить приложение
 
-`sail up -d`
+    `sail up -d`
 
-Запустить планировщик задач:
+4. Выполнить миграции:
 
-`sail php artisan schedule:work`
+    `sail php artisan migrate`
+
+5. Запустить планировщик задач:
+
+    - Для локальной машины:
+        `sail php artisan schedule:work`
+
+    - Для прода:
+        `crontab -e`
+        `* * * * * docker exec <your_project>-laravel.test-1 php artisan schedule:run >> /dev/null 2>&1`
 
 
 ## Стек
